@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: agenda-facil-pro
+  profiles:
+    active: development
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGGRES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: ${EXPIRATION_TIME}
+    refresh-expiration: ${REFRESH_TIME}
+  rate-limit:
+    requests-per-minute: 100
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+springdoc:
+  api-docs:
+    path: /api/docs
+  swagger-ui:
+    path: /swagger-ui.html
