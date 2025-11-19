@@ -4,8 +4,10 @@ package api.agendafacilpro.core.domain.entities;
 import api.agendafacilpro.core.domain.valueobjects.CpfCnpj;
 import api.agendafacilpro.core.exceptions.ValidationException;
 
+import java.util.UUID;
+
 public final class Organization {
-    private final Long id;
+    private final UUID id;
     private final Info info;
 
     private Organization(Builder builder) {
@@ -46,12 +48,12 @@ public final class Organization {
     }
 
     public static class Builder {
-        private Long id;
+        private UUID id;
         private String name;
         private CpfCnpj document;
         private String subscriptionTier = "BASIC";
 
-        public Builder withId(Long id) {
+        public Builder withId(UUID id) {
             this.id = id;
             return this;
         }
