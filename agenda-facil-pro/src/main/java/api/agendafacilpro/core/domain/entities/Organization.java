@@ -25,7 +25,7 @@ public final class Organization {
         }
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
