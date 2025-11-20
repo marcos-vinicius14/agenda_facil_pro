@@ -62,7 +62,6 @@ public final class User {
         return Boolean.FALSE.equals(this.enabled);
     }
 
-    // Getters
     public UUID getId() { return id; }
     public UUID getOrganizationId() { return organizationId; }
     public Email getEmail() { return email; }
