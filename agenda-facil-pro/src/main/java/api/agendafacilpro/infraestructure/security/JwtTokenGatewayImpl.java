@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.security.Key;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@Component
 public class JwtTokenGatewayImpl implements JwtTokenGateway {
 
     @Value("${security.jwt.secret}")
