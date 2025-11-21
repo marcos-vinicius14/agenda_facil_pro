@@ -1,6 +1,5 @@
 package api.agendafacilpro.core.domain.entities;
 
-
 import api.agendafacilpro.core.domain.valueobjects.CpfCnpj;
 import api.agendafacilpro.core.exceptions.ValidationException;
 
@@ -12,7 +11,7 @@ public final class Organization {
 
     private Organization(Builder builder) {
         this.id = builder.id;
-        this.info = builder.build().info;
+        this.info = new Info(builder.name, builder.document, builder.subscriptionTier);
         validate();
     }
 

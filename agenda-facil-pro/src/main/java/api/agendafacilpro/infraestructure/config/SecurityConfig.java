@@ -1,5 +1,6 @@
 package api.agendafacilpro.infraestructure.config;
 
+import api.agendafacilpro.infraestructure.web.security.SecurityFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
