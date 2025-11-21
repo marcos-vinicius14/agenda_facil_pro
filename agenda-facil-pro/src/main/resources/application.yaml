@@ -32,13 +32,14 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
-security:
-  jwt:
-    secret: ${JWT_SECRET}
-    expiration: ${EXPIRATION_TIME}
-    refresh-expiration: ${REFRESH_TIME}
-  rate-limit:
-    requests-per-minute: 100
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:MinhaChaveSecretaSuperSeguraQueDeveTerPeloMenos256BitsParaHMAC}
+      # 15 minutos = 900000 ms
+      access-token-expiration: 900000
+      # 7 dias = 604800000 ms
+      refresh-token-expiration: 604800000
 
 server:
   port: 8080

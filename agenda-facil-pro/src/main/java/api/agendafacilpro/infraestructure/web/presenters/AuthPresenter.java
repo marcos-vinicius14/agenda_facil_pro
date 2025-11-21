@@ -9,10 +9,7 @@ public class AuthPresenter {
         return new AuthResponse(
                 output.userId(),
                 output.organizationId(),
-                output.email(),
-                output.accessToken(),
-                output.refreshToken(),
-                "Bearer"
+                output.email()
         );
     }
 }

@@ -12,20 +12,7 @@ public record AuthResponse(
         UUID organizationId,
 
         @Schema(description = "Email do usuário", example = "admin@clinica.com")
-        String email,
+        String email
 
-        @Schema(description = "Token JWT de Acesso (Curta duração)", example = "eyJhbGciOiJIUzI1NiIsIn...")
-        String accessToken,
-
-        @Schema(description = "Token JWT de Refresh (Longa duração)", example = "eyJhbGciOiJIUzI1NiIsIn...")
-        String refreshToken,
-
-        @Schema(description = "Tipo do token para ser usado no Header Authorization", example = "Bearer")
-        String tokenType
 ) {
-    public AuthResponse {
-        if (tokenType == null) {
-            tokenType = "Bearer";
-        }
-    }
 }
