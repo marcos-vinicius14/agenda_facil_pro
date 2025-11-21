@@ -6,6 +6,8 @@ import api.agendafacilpro.core.gateway.OrganizationGateway;
 import api.agendafacilpro.infraestructure.persistence.entities.OrganizationJpaEntity;
 import api.agendafacilpro.infraestructure.persistence.repository.OrganizationJpaRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -29,6 +31,7 @@ public class OrganizationRepositoryGateway implements OrganizationGateway {
 
     @Override
     @Transactional
+    @CacheEvict(value = "organizations", key = "#organization.id")
     public Organization update(Organization organization) {
         UUID id = organization.getId();
 
@@ -45,6 +48,7 @@ public class OrganizationRepositoryGateway implements OrganizationGateway {
     }
 
     @Override
+    @Cacheable(value = "organizations", key = "#id")
     public Optional<Organization> findById(UUID id) {
         return repository.findById(id)
                 .map(OrganizationJpaEntity::toDomain);

@@ -1,0 +1,14 @@
+package api.agendafacilpro.infraestructure.config.jackson;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import org.springframework.security.core.userdetails.User;
+
+@JsonDeserialize(builder = User.UserBuilder.class)
+public abstract class UserMixin {
+    @JsonPOJOBuilder(withPrefix = "with", buildMethodName = "build")
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class UserBuilderMixIn {
+    }
+}
