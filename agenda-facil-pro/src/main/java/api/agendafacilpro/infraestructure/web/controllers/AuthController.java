@@ -36,6 +36,10 @@ public class AuthController {
 
     @Value("${api.security.token.refresh-token-expiration}")
     private Long refreshTokenExpirationMs;
+
+    @Value("${api.security.cookie.secure:false}")
+    private boolean cookieSecure;
+
     private final RegisterClinicUseCase registerUseCase;
 
     public AuthController(RegisterClinicUseCase registerUseCase) {
@@ -72,7 +76,7 @@ public class AuthController {
 
         ResponseCookie accessCookie = ResponseCookie.from("access_token", output.accessToken())
                 .httpOnly(true)
-                .secure(false) // True em prod
+                .secure(cookieSecure)
                 .path("/")
                 .maxAge(Duration.ofMillis(accessTokenExpirationMs))
                 .sameSite("Strict")
@@ -80,7 +84,7 @@ public class AuthController {
 
         ResponseCookie refreshCookie = ResponseCookie.from("refresh_token", output.refreshToken())
                 .httpOnly(true)
-                .secure(false) // True em prod
+                .secure(cookieSecure)
                 .path("/")
                 .maxAge(Duration.ofMillis(refreshTokenExpirationMs))
                 .sameSite("Strict")
@@ -106,7 +110,7 @@ public class AuthController {
     public ResponseEntity<Void> logout() {
         ResponseCookie deleteAccessCookie = ResponseCookie.from("access_token", "")
                 .httpOnly(true)
-                .secure(false) // True em produção (HTTPS)
+                .secure(cookieSecure)
                 .path("/")
                 .maxAge(0)
                 .sameSite("Strict")
@@ -114,7 +118,7 @@ public class AuthController {
 
         ResponseCookie deleteRefreshCookie = ResponseCookie.from("refresh_token", "")
                 .httpOnly(true)
-                .secure(false) // True em produção
+                .secure(true)
                 .path("/")
                 .maxAge(0)
                 .sameSite("Strict")

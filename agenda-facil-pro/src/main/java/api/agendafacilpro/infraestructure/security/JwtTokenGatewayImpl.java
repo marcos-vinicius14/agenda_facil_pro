@@ -4,6 +4,7 @@ import api.agendafacilpro.core.gateway.JwtTokenGateway;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -79,7 +80,7 @@ public class JwtTokenGatewayImpl implements JwtTokenGateway {
     // Método auxiliar para gerar a chave de assinatura
     private SecretKey getSigningKey() {
         // Se a chave for Base64, use Decoders.BASE64.decode(secret)
-        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        return Decoders.BASE64.decode(secret.getBytes(StandardCharsets.UTF_8));
     }
 
     // Método auxiliar para fazer o parse e validação
