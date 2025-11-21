@@ -6,6 +6,8 @@ import api.agendafacilpro.core.exceptions.UserNotFoundException;
 import api.agendafacilpro.core.gateway.UserGateway;
 import api.agendafacilpro.infraestructure.persistence.entities.UserJpaEntity;
 import api.agendafacilpro.infraestructure.persistence.repository.UserJpaRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +34,7 @@ public class UserRepositoryGateway implements UserGateway {
 
     @Override
     @Transactional
+    @CacheEvict(value = "users", key = "#user.id")
     public User update(User user) {
         UUID id = user.getId();
 
@@ -49,6 +52,7 @@ public class UserRepositoryGateway implements UserGateway {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "users", key = "#email")
     public Optional<User> findByEmail(Email email) {
         return repository.findByEmail(email.getValue())
                 .map(UserJpaEntity::toDomain);
@@ -56,7 +60,9 @@ public class UserRepositoryGateway implements UserGateway {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "users", key = "#id")
     public Optional<User> findById(UUID id) {
+        System.out.println("--- Buscando Usuário no Banco de Dados: " + id + " ---");
         return repository.findById(id)
                 .map(UserJpaEntity::toDomain);
     }
