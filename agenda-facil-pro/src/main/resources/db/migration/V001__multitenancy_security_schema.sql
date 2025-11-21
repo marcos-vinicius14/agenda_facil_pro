@@ -98,6 +98,9 @@ CREATE TABLE tb_role_permissions
     PRIMARY KEY (role_id, permission_id)
 );
 
+-- 1. ADMIN (ID ...0001)
+INSERT INTO tb_role_permissions (role_id, permission_id)
+SELECT '0193512b-ccf0-7000-8000-000000000001', id FROM tb_permissions;
 
 -- DENTIST (ID ...0002) gets ALL permissions currently registered
 INSERT INTO tb_role_permissions (role_id, permission_id)
