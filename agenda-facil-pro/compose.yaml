@@ -1,29 +1,69 @@
 services:
-  postgres:
-    image: postgres:16-alpine
-    env_file:
-      - ./.env
+  api:
+    build: .
+    container_name: ${PROJECT_NAME}-api
     ports:
-      - "5432:5432"
+      - "${API_PORT}:8080"
+    networks:
+      - ${NETWORK_NAME}
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILE}
+
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:${POSTGRES_PORT}/${POSTGRES_DB}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+
+      - SPRING_DATA_REDIS_HOST=redis
+      - SPRING_DATA_REDIS_PORT=${REDIS_PORT}
+      - API_SECURITY_TOKEN_SECRET=${JWT_SECRET}
+      - API_SECURITY_COOKIE_SECURE=${COOKIE_SECURE}
+
+  postgres:
+    image: postgres:${POSTGRES_VERSION}
+    container_name: ${PROJECT_NAME}-postgres
+    networks:
+      - ${NETWORK_NAME}
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
+    image: redis:${REDIS_VERSION}
+    container_name: ${PROJECT_NAME}-redis
+    networks:
+      - ${NETWORK_NAME}
     command: >
       redis-server 
       --maxmemory 2gb 
       --maxmemory-policy allkeys-lru
-      
-    deploy:
-     resources:
-      limits:
-        memory: 2560m
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:
   redis_data:
+
+networks:
+  agenda-network:
+    name: ${NETWORK_NAME}
+    driver: bridge

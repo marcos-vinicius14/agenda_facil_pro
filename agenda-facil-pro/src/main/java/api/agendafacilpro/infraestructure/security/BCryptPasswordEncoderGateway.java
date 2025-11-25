@@ -1,14 +1,14 @@
 package api.agendafacilpro.infraestructure.security;
 
 import api.agendafacilpro.core.gateway.PasswordEncoderGateway;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BCryptPasswordEncoderGateway implements PasswordEncoderGateway {
-    private final BCryptPasswordEncoder encoder;
+    private final PasswordEncoder encoder;
 
-    public BCryptPasswordEncoderGateway(BCryptPasswordEncoder encoder) {
+    public BCryptPasswordEncoderGateway(PasswordEncoder encoder) {
         this.encoder = encoder;
     }
 

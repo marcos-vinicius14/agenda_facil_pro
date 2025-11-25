@@ -78,4 +78,11 @@ public class UserRepositoryGateway implements UserGateway {
     public List<String> findPermissionsUserId(UUID id) {
         return repository.findPermissionsByUserId(id);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    @Cacheable(value = "users-permissions", key = "#id")
+    public List<String> findPermissionsByUserId(UUID id) {
+        return repository.findPermissionsByUserId(id);
+    }
 }

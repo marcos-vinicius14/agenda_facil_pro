@@ -4,21 +4,20 @@ import api.agendafacilpro.core.domain.valueobjects.Email;
 import api.agendafacilpro.core.exceptions.ValidationException;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 public final class User {
 
-    // Imutáveis (identidade e dados core)
     private final UUID id;
     private final UUID organizationId;
     private final Email email;
     private final String passwordHash;
     private final Instant createdAt;
 
-    // Mutáveis (estado)
     private Boolean enabled;
     private Integer failedAttempts;
-    private Instant lockoutTime; // Mudado para Instant (UTC)
+    private Instant lockoutTime;
 
     private User(Builder builder) {
         this.id = builder.id;
@@ -29,8 +28,6 @@ public final class User {
         this.failedAttempts = builder.failedAttempts;
         this.lockoutTime = builder.lockoutTime;
 
-        // Correção do Bug: Se o builder trouxe data (do banco), usa ela.
-        // Se não (novo user), cria agora.
         this.createdAt = builder.createdAt != null ? builder.createdAt : Instant.now();
 
         validate();
@@ -42,14 +39,21 @@ public final class User {
         if (passwordHash == null || passwordHash.isBlank()) throw new ValidationException("A senha é obrigatória");
     }
 
-    // Regras de Negócio
     public void recordFailedLogin() {
-        this.failedAttempts++; // Agora seguro, pois garantimos que não é null na construção
+        this.failedAttempts++;
 
         if (this.failedAttempts >= 5) {
             this.enabled = false;
-            this.lockoutTime = Instant.now(); // Registra o momento exato do bloqueio em UTC
+            this.lockoutTime = Instant.now();
         }
+    }
+
+    public boolean isLockExpired() {
+        if (this.lockoutTime == null) return true;
+
+        long LOCK_TIME_MINUTES = 30;
+        Instant unlockTime = this.lockoutTime.plus(LOCK_TIME_MINUTES, ChronoUnit.MINUTES);
+        return Instant.now().isAfter(unlockTime);
     }
 
     public void resetFailedAttempts() {

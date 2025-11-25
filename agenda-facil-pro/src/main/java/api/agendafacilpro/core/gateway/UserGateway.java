@@ -14,4 +14,6 @@ public interface UserGateway {
     Optional<User> findById(UUID id);
     boolean existsByEmail(String email);
     List<String> findPermissionsUserId(UUID id);
+
+    List<String> findPermissionsByUserId(UUID id);
 }

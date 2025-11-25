@@ -8,7 +8,7 @@ public final class Password {
 
     public Password(String plainPassword) {
         if (plainPassword == null || plainPassword.length() < 8) {
-            throw new ValidationException("Password must be at least 8 characters");
+            throw new ValidationException("A senha deve conter mais de 8 caracteres");
         }
         this.hash = null;
     }

@@ -77,13 +77,11 @@ public class JwtTokenGatewayImpl implements JwtTokenGateway {
         return getClaims(token).get("permissions", List.class);
     }
 
-    // Método auxiliar para gerar a chave de assinatura
     private SecretKey getSigningKey() {
-        // Se a chave for Base64, use Decoders.BASE64.decode(secret)
-        return Decoders.BASE64.decode(secret.getBytes(StandardCharsets.UTF_8));
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // Método auxiliar para fazer o parse e validação
     private Claims getClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())

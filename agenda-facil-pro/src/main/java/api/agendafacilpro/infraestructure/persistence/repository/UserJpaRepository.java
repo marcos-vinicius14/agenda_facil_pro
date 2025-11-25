@@ -16,9 +16,12 @@ public interface UserJpaRepository extends JpaRepository<UserJpaEntity, UUID> {
 
     boolean existsByEmail(String email);
 
-    @Query(nativeQuery = true, value = "SELECT p.name FROM tb_permissions p " +
-            "JOIN tb_role_permissions rp ON p.id = rp.permission_id " +
-            "JOIN tb_user_roles ur ON rp.role_id = ur.role_id " +
-            "WHERE ur.user_id = :userId")
+    @Query(value = """
+            SELECT DISTINCT p.name
+            FROM tb_permissions p
+            INNER JOIN tb_role_permissions rp ON p.id = rp.permission_id
+            INNER JOIN tb_user_roles ur ON rp.role_id = ur.role_id
+            WHERE ur.user_id = :userId
+            """, nativeQuery = true)
     List<String> findPermissionsByUserId(@Param("userId") UUID userId);
 }

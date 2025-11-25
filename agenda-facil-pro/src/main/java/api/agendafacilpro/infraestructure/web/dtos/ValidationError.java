@@ -1,7 +1,11 @@
 package api.agendafacilpro.infraestructure.web.dtos;
 
-public record ValidationError(String field, String message) {
-    public ValidationError(String message) {
-        this(null, message);
-    }
-}
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record ValidationError(
+        @Schema(description = "Nome do campo com erro", example = "email")
+        String field,
+
+        @Schema(description = "Mensagem de erro", example = "Deve ser um e-mail válido")
+        String message
+) {}
