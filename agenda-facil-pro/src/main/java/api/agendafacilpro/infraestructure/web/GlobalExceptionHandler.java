@@ -1,5 +1,6 @@
 package api.agendafacilpro.infraestructure.web;
 
+import api.agendafacilpro.core.exceptions.ForbiddenException;
 import api.agendafacilpro.core.exceptions.UserNotFoundException;
 import api.agendafacilpro.core.exceptions.ValidationException; // Sua exceção de Domínio
 import api.agendafacilpro.infraestructure.web.dtos.ErrorResponse;
@@ -78,4 +79,20 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(status).body(response);
     }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ErrorResponse> handleForbiddenException(ForbiddenException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+
+        var response = ErrorResponse.simple(
+                status.value(),
+                "Acesso negado",
+                e.getMessage(),
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(status).body(response);
+    }
+
+
 }
