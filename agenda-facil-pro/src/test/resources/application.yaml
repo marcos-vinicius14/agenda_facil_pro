@@ -1,0 +1,47 @@
+spring:
+  main:
+    # Permite que o Spring substitua beans em caso de conflito nos testes
+    allow-bean-definition-overriding: true
+
+  # Usa cache em memória (HashMap) para não depender de Redis externo nos testes
+  cache:
+    type: simple
+
+  data:
+    redis:
+      repositories:
+        enabled: false
+
+  # Força o Spring a ignorar a configuração automática do Redis
+  # Evita erros de conexão se não houver container Redis rodando
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration
+
+# ==========================================
+# MOCK DAS VARIÁVEIS DE AMBIENTE (IMPORTANTE)
+# ==========================================
+api:
+  security:
+    token:
+      secret: SegredoSuperSecretoFalsoParaAmbienteDeTestes1234567890
+      access-token-expiration: 60000
+      refresh-token-expiration: 120000
+    cookie:
+      secure: false
+
+# ==========================================
+# OUTRAS CONFIGURAÇÕES
+# ==========================================
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+logging:
+  level:
+    root: INFO
+    # Logs detalhados da aplicação para debugar falhas nos testes
+    api.agendafacilpro: DEBUG

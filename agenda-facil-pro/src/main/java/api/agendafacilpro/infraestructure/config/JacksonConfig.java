@@ -22,6 +22,8 @@ public class JacksonConfig {
             builder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
             builder.featuresToDisable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
+            builder.modulesToInstall(new JavaTimeModule());
+
             builder.mixIn(User.class, UserMixin.class);
             builder.mixIn(User.Builder.class, UserMixin.UserBuilderMixIn.class);
             builder.mixIn(Email.class, UserMixin.class);

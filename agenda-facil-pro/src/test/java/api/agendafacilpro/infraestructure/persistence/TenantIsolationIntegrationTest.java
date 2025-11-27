@@ -23,8 +23,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
-@EnableJpaRepositories(basePackages = "api.agendafacilpro.infraestructure.persistence.repository")
-@EntityScan(basePackages = "api.agendafacilpro.infraestructure.persistence.entities")
 class OrganizationRepositoryIntegrationTest {
 
     @Container
