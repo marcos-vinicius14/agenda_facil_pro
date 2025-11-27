@@ -37,6 +37,8 @@ public final class Patient {
     private final boolean isActive;
     private final Instant createdAt;
 
+    public static Builder builder() { return new Builder(); }
+
     private Patient(Builder builder) {
         this.id = builder.id;
         this.organizationId = builder.organizationId;
