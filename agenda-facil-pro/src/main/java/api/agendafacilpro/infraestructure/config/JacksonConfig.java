@@ -1,9 +1,11 @@
 package api.agendafacilpro.infraestructure.config;
 
 import api.agendafacilpro.core.domain.entities.Organization;
+import api.agendafacilpro.core.domain.entities.Patient;
 import api.agendafacilpro.core.domain.entities.User;
 import api.agendafacilpro.core.domain.valueobjects.Email;
 import api.agendafacilpro.infraestructure.config.jackson.OrganizationMixin;
+import api.agendafacilpro.infraestructure.config.jackson.PatientMixIn;
 import api.agendafacilpro.infraestructure.config.jackson.UserMixin;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -28,6 +30,9 @@ public class JacksonConfig {
             builder.mixIn(User.Builder.class, UserMixin.UserBuilderMixIn.class);
             builder.mixIn(Email.class, UserMixin.class);
             builder.mixIn(Organization.class, OrganizationMixin.class);
+
+            builder.mixIn(Patient.class, PatientMixIn.class);
+            builder.mixIn(Patient.Builder.class, PatientMixIn.PatientBuilderMixIn.class);
         };
     }
 }

@@ -1,16 +1,19 @@
 package api.agendafacilpro.infraestructure.config;
 
-import api.agendafacilpro.core.gateway.JwtTokenGateway;
-import api.agendafacilpro.core.gateway.OrganizationGateway;
-import api.agendafacilpro.core.gateway.PasswordEncoderGateway;
-import api.agendafacilpro.core.gateway.UserGateway;
+import api.agendafacilpro.core.gateway.*;
 import api.agendafacilpro.core.usecases.auth.AuthenticateUserUseCase;
 import api.agendafacilpro.core.usecases.organization.RegisterClinicUseCase;
+import api.agendafacilpro.core.usecases.patient.CreatePatientUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class UseCasesConfig {
+    @Bean
+    public CreatePatientUseCase createPatientUseCase(PatientGateway patientGateway) {
+        return new CreatePatientUseCase(patientGateway);
+    }
+
     @Bean
     public RegisterClinicUseCase registerClinicUseCase(
             OrganizationGateway organizationGateway,

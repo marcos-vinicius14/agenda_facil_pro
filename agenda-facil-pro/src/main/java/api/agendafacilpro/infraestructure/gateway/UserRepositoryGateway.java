@@ -3,6 +3,7 @@ package api.agendafacilpro.infraestructure.gateway;
 import api.agendafacilpro.core.domain.entities.User;
 import api.agendafacilpro.core.domain.valueobjects.Email;
 import api.agendafacilpro.core.exceptions.UserNotFoundException;
+import api.agendafacilpro.core.exceptions.ValidationException;
 import api.agendafacilpro.core.gateway.UserGateway;
 import api.agendafacilpro.infraestructure.persistence.entities.UserJpaEntity;
 import api.agendafacilpro.infraestructure.persistence.repository.UserJpaRepository;
@@ -39,7 +40,7 @@ public class UserRepositoryGateway implements UserGateway {
         UUID id = user.getId();
 
         if (id == null) {
-            throw new IllegalArgumentException("Um usuário não pode ser atualizado sem ID.");
+            throw new ValidationException("Um usuário não pode ser atualizado sem ID.");
         }
 
         UserJpaEntity entity = repository.findById(id)
