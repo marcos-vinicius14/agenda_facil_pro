@@ -11,11 +11,10 @@ import api.agendafacilpro.core.gateway.OrganizationGateway;
 import api.agendafacilpro.core.gateway.PasswordEncoderGateway;
 import api.agendafacilpro.core.gateway.UserGateway;
 import api.agendafacilpro.core.usecases.UseCase;
-import api.agendafacilpro.core.usecases.input.RegisterClinicInput;
+import api.agendafacilpro.core.usecases.input.clinic.RegisterClinicInput;
 import api.agendafacilpro.core.usecases.output.RegisterClinicOutPut;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public final class RegisterClinicUseCase implements UseCase<RegisterClinicInput, RegisterClinicOutPut> {
 

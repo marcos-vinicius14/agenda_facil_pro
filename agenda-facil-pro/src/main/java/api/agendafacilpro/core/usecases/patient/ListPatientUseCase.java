@@ -6,8 +6,8 @@ import api.agendafacilpro.core.domain.shared.Pagination;
 import api.agendafacilpro.core.gateway.PatientGateway;
 import api.agendafacilpro.core.multitenancy.TenantContext;
 import api.agendafacilpro.core.usecases.UseCase;
-import api.agendafacilpro.core.usecases.input.ListPatientInput;
-import api.agendafacilpro.core.usecases.output.ListPatientOutput;
+import api.agendafacilpro.core.usecases.input.patient.ListPatientInput;
+import api.agendafacilpro.core.usecases.output.patient.ListPatientOutput;
 import api.agendafacilpro.infraestructure.security.annotations.HasPermission;
 
 import java.util.List;

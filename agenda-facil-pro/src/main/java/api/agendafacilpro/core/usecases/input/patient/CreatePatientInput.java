@@ -1,4 +1,4 @@
-package api.agendafacilpro.core.usecases.input;
+package api.agendafacilpro.core.usecases.input.patient;
 
 public record CreatePatientInput(
         String name,

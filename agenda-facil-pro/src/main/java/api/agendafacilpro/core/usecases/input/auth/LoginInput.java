@@ -1,4 +1,4 @@
-package api.agendafacilpro.core.usecases.input;
+package api.agendafacilpro.core.usecases.input.auth;
 
 import api.agendafacilpro.core.domain.valueobjects.Email;
 

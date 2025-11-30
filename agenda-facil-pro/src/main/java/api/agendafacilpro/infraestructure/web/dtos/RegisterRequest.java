@@ -1,6 +1,6 @@
 package api.agendafacilpro.infraestructure.web.dtos;
 
-import api.agendafacilpro.core.usecases.input.RegisterClinicInput;
+import api.agendafacilpro.core.usecases.input.clinic.RegisterClinicInput;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

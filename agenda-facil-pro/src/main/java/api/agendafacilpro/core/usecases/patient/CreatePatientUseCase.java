@@ -8,8 +8,8 @@ import api.agendafacilpro.core.exceptions.ValidationException;
 import api.agendafacilpro.core.gateway.PatientGateway;
 import api.agendafacilpro.core.multitenancy.TenantContext;
 import api.agendafacilpro.core.usecases.UseCase;
-import api.agendafacilpro.core.usecases.input.CreatePatientInput;
-import api.agendafacilpro.core.usecases.output.CreatePatientOutput;
+import api.agendafacilpro.core.usecases.input.patient.CreatePatientInput;
+import api.agendafacilpro.core.usecases.output.patient.CreatePatientOutput;
 import api.agendafacilpro.infraestructure.security.annotations.HasPermission;
 
 import java.util.UUID;

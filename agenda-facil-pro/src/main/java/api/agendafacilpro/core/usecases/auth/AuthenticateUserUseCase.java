@@ -7,7 +7,7 @@ import api.agendafacilpro.core.gateway.JwtTokenGateway;
 import api.agendafacilpro.core.gateway.PasswordEncoderGateway;
 import api.agendafacilpro.core.gateway.UserGateway;
 import api.agendafacilpro.core.usecases.UseCase;
-import api.agendafacilpro.core.usecases.input.LoginInput;
+import api.agendafacilpro.core.usecases.input.auth.LoginInput;
 import api.agendafacilpro.core.usecases.output.LoginOutput;
 
 import java.util.List;

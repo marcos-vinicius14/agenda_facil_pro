@@ -4,6 +4,7 @@ import api.agendafacilpro.core.gateway.*;
 import api.agendafacilpro.core.usecases.auth.AuthenticateUserUseCase;
 import api.agendafacilpro.core.usecases.organization.RegisterClinicUseCase;
 import api.agendafacilpro.core.usecases.patient.CreatePatientUseCase;
+import api.agendafacilpro.core.usecases.patient.ListPatientUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,6 +13,11 @@ public class UseCasesConfig {
     @Bean
     public CreatePatientUseCase createPatientUseCase(PatientGateway patientGateway) {
         return new CreatePatientUseCase(patientGateway);
+    }
+
+    @Bean
+    public ListPatientUseCase  listPatientUseCase(PatientGateway patientGateway) {
+        return new ListPatientUseCase(patientGateway);
     }
 
     @Bean

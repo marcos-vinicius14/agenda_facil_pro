@@ -1,4 +1,4 @@
-package api.agendafacilpro.core.usecases.output;
+package api.agendafacilpro.core.usecases.output.patient;
 
 import java.util.UUID;
 
