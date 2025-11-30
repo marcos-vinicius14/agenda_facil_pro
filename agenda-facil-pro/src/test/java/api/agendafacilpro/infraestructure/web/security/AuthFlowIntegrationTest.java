@@ -4,7 +4,7 @@ import api.agendafacilpro.BaseIntegrationTest;
 import api.agendafacilpro.core.gateway.PasswordEncoderGateway;
 import api.agendafacilpro.infraestructure.persistence.repository.OrganizationJpaRepository;
 import api.agendafacilpro.infraestructure.persistence.repository.UserJpaRepository;
-import api.agendafacilpro.infraestructure.web.dtos.RegisterRequest;
+import api.agendafacilpro.infraestructure.web.dtos.request.RegisterRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;

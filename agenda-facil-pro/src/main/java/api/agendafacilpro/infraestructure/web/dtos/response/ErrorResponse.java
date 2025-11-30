@@ -1,5 +1,6 @@
-package api.agendafacilpro.infraestructure.web.dtos;
+package api.agendafacilpro.infraestructure.web.dtos.response;
 
+import api.agendafacilpro.infraestructure.web.dtos.ValidationError;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 

@@ -1,4 +1,4 @@
-package api.agendafacilpro.infraestructure.web.dtos;
+package api.agendafacilpro.infraestructure.web.dtos.request;
 
 import api.agendafacilpro.core.usecases.input.clinic.RegisterClinicInput;
 import io.swagger.v3.oas.annotations.media.Schema;

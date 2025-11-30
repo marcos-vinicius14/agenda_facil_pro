@@ -1,6 +1,6 @@
 package api.agendafacilpro.infraestructure.web.filters;
 
-import api.agendafacilpro.infraestructure.web.dtos.ErrorResponse;
+import api.agendafacilpro.infraestructure.web.dtos.response.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;

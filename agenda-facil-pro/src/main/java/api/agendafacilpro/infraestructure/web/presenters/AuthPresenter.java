@@ -1,7 +1,7 @@
 package api.agendafacilpro.infraestructure.web.presenters;
 
 import api.agendafacilpro.core.usecases.output.RegisterClinicOutPut;
-import api.agendafacilpro.infraestructure.web.dtos.AuthResponse;
+import api.agendafacilpro.infraestructure.web.dtos.response.AuthResponse;
 
 public class AuthPresenter {
 

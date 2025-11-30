@@ -3,7 +3,7 @@ package api.agendafacilpro.infraestructure.web;
 import api.agendafacilpro.core.exceptions.ForbiddenException;
 import api.agendafacilpro.core.exceptions.UserNotFoundException;
 import api.agendafacilpro.core.exceptions.ValidationException; // Sua exceção de Domínio
-import api.agendafacilpro.infraestructure.web.dtos.ErrorResponse;
+import api.agendafacilpro.infraestructure.web.dtos.response.ErrorResponse;
 import api.agendafacilpro.infraestructure.web.dtos.ValidationError;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;

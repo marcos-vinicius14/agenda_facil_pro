@@ -2,10 +2,9 @@ package api.agendafacilpro.infraestructure.web.controllers;
 
 import api.agendafacilpro.core.usecases.organization.RegisterClinicUseCase;
 import api.agendafacilpro.core.usecases.output.RegisterClinicOutPut;
-import api.agendafacilpro.infraestructure.web.dtos.AuthResponse;
-import api.agendafacilpro.infraestructure.web.dtos.ErrorResponse;
-import api.agendafacilpro.infraestructure.web.dtos.RegisterRequest;
-import api.agendafacilpro.infraestructure.web.presenters.AuthPresenter;
+import api.agendafacilpro.infraestructure.web.dtos.response.AuthResponse;
+import api.agendafacilpro.infraestructure.web.dtos.response.ErrorResponse;
+import api.agendafacilpro.infraestructure.web.dtos.request.RegisterRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
