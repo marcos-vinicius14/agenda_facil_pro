@@ -36,7 +36,7 @@ public class PatientJpaEntity {
     @Column(nullable = false, unique = true)
     private String document;
 
-    @Column(nullable = false)
+    @Column(name = "active", nullable = false)
     private Boolean isActive = true;
 
     @CreationTimestamp

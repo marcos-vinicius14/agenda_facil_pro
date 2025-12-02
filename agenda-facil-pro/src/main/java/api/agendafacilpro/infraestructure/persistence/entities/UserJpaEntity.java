@@ -29,7 +29,7 @@ public class UserJpaEntity {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    @Column(nullable = false)
+    @Column(name = "enabled", nullable = false)
     private Boolean enabled = true;
 
     @Column(name = "failed_attempts")

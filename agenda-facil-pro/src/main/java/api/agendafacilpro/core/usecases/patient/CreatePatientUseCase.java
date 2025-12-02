@@ -14,7 +14,7 @@ import api.agendafacilpro.infraestructure.security.annotations.HasPermission;
 
 import java.util.UUID;
 
-public final class CreatePatientUseCase implements UseCase<CreatePatientInput, CreatePatientOutput> {
+public class CreatePatientUseCase implements UseCase<CreatePatientInput, CreatePatientOutput> {
 
     private final PatientGateway patientGateway;
 

@@ -34,7 +34,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
 class PatientIntegrationTest extends BaseIntegrationTest {
 
     @Autowired private MockMvc mockMvc;
@@ -82,6 +81,7 @@ class PatientIntegrationTest extends BaseIntegrationTest {
                         .cookie(cookieUserA)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
+                .andDo(org.springframework.test.web.servlet.result.MockMvcResultHandlers.print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is("João da Silva")))
                 .andExpect(jsonPath("$.active", is(true)));
