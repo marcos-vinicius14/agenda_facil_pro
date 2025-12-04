@@ -71,7 +71,7 @@ export function LoginCard() {
                             <Stethoscope className="h-20 w-20 text-blue-600" strokeWidth={1.5} />
                         </div>
 
-                        <h2 className="text-3xl font-extrabold leading-tight text-slate-900 mb-5 tracking-tight">
+                        <h2 className="font-heading text-3xl font-extrabold leading-tight text-slate-900 mb-5 tracking-tight">
                             Simplifique a <span className="bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Gestão da sua Clínica.</span>
                         </h2>
 
