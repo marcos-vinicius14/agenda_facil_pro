@@ -11,7 +11,7 @@ import { Card } from "@/components/ui/Card";
 import { Eye, EyeOff, Stethoscope } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { login } from "@/app/login/actions";
+import { loginState as login } from "@/app/login/actions";
 
 const loginSchema = z.object({
     email: z.string().min(1, "O campo é obrigatório"),
@@ -51,10 +51,12 @@ export function LoginCard() {
 
             const result = await login({} as any, formData);
 
-            if (result.success) {
+            if (result?.message) {
                 setServerSuccess(true);
+            } else if (result?.errors?.form) {
+                setServerError(result.errors.form);
             } else {
-                setServerError(result.message || "Aconteceu um erro inesperado.");
+                setServerError("Aconteceu um erro inesperado.");
             }
         });
     };
