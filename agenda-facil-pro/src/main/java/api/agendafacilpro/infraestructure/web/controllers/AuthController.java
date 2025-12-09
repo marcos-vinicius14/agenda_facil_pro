@@ -1,7 +1,10 @@
 package api.agendafacilpro.infraestructure.web.controllers;
 
+import api.agendafacilpro.core.usecases.auth.AuthenticateUserUseCase;
 import api.agendafacilpro.core.usecases.organization.RegisterClinicUseCase;
+import api.agendafacilpro.core.usecases.output.LoginOutput;
 import api.agendafacilpro.core.usecases.output.RegisterClinicOutPut;
+import api.agendafacilpro.infraestructure.web.dtos.request.LoginRequest;
 import api.agendafacilpro.infraestructure.web.dtos.response.AuthResponse;
 import api.agendafacilpro.infraestructure.web.dtos.response.ErrorResponse;
 import api.agendafacilpro.infraestructure.web.dtos.request.RegisterRequest;
@@ -40,10 +43,41 @@ public class AuthController {
     private boolean cookieSecure;
 
     private final RegisterClinicUseCase registerUseCase;
+    private final AuthenticateUserUseCase authenticateUserUseCase;
 
-    public AuthController(RegisterClinicUseCase registerUseCase) {
+    public AuthController(RegisterClinicUseCase registerUseCase, AuthenticateUserUseCase authenticateUserUseCase) {
         this.registerUseCase = registerUseCase;
+        this.authenticateUserUseCase = authenticateUserUseCase;
     }
+
+    @PostMapping("/login")
+    @Transactional
+    @Operation(summary = "Realizar Login", description = "Autentica o usuário e retorna cookies HttpOnly de sessão.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login realizado com sucesso",
+                    content = @Content(schema = @Schema(implementation = AuthResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Credenciais inválidas", content = @Content),
+            @ApiResponse(responseCode = "429", description = "Muitas tentativas (Bloqueio temporário)", content = @Content)
+    })
+
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+        LoginOutput output = authenticateUserUseCase.execute(request.toUseCaseInput());
+
+        ResponseCookie accessCookie = createCookie("access_token", output.acessToken(), accessTokenExpirationMs);
+        ResponseCookie refreshCookie = createCookie("refresh_token", output.acessToken(), refreshTokenExpirationMs);
+
+        AuthResponse responseBody = new AuthResponse(
+                output.userId(),
+                output.organizationId(),
+                output.email()
+        );
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                .body(responseBody);
+    }
+
 
     @Operation(
             summary = "Registrar nova Clínica",
@@ -127,6 +161,16 @@ public class AuthController {
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, deleteAccessCookie.toString())
                 .header(HttpHeaders.SET_COOKIE, deleteRefreshCookie.toString())
+                .build();
+    }
+
+    private ResponseCookie createCookie(String key, String value, Long maxAgeMs) {
+        return ResponseCookie.from(key, value)
+                .httpOnly(true)
+                .secure(cookieSecure)
+                .path("/")
+                .maxAge(Duration.ofMillis(maxAgeMs))
+                .sameSite("Strict")
                 .build();
     }
 }

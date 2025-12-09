@@ -27,13 +27,13 @@ import java.util.UUID;
 @RequestMapping("/api/v1/patients")
 @Tag(name = "Patients", description = "Gestão completa de pacientes")
 @SecurityRequirement(name = "bearerAuth")
-public class PaatientController {
+public class PatientController {
     private final CreatePatientUseCase createPatientUseCase;
     private final ListPatientUseCase listPatientUseCase;
     private final SoftDeletePatientUseCase softDeletePatientUseCase;
 
 
-    public PaatientController(CreatePatientUseCase createPatientUseCase, ListPatientUseCase listPatientUseCase, SoftDeletePatientUseCase softDeletePatientUseCase) {
+    public PatientController(CreatePatientUseCase createPatientUseCase, ListPatientUseCase listPatientUseCase, SoftDeletePatientUseCase softDeletePatientUseCase) {
         this.createPatientUseCase = createPatientUseCase;
         this.listPatientUseCase = listPatientUseCase;
         this.softDeletePatientUseCase = softDeletePatientUseCase;

@@ -11,6 +11,7 @@ import api.agendafacilpro.infraestructure.persistence.repository.OrganizationJpa
 import api.agendafacilpro.infraestructure.persistence.repository.PatientJpaRepository;
 import api.agendafacilpro.infraestructure.persistence.repository.UserJpaRepository;
 import api.agendafacilpro.infraestructure.web.dtos.request.CreatePatientRequest;
+import api.agendafacilpro.infraestructure.web.dtos.request.LoginRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.Cookie;
@@ -18,13 +19,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,6 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class PatientIntegrationTest extends BaseIntegrationTest {
+    private static final String VALID_CPF = "93644112300";
+    private static final String VALID_CPF_2 = "12345678909";
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
@@ -64,7 +66,7 @@ class PatientIntegrationTest extends BaseIntegrationTest {
 
         userA = createUser(orgA, "admin.a@clinica.com");
 
-        cookieUserA = doLogin("admin.a@clinica.com", "123456");
+        cookieUserA = doLogin("admin.a@clinica.com", "123456789");
     }
 
     @Test
@@ -74,20 +76,20 @@ class PatientIntegrationTest extends BaseIntegrationTest {
                 "João da Silva",
                 "joao@gmail.com",
                 "11999998888",
-                "96632439066"
+                generateValidCpf()
         );
 
-        mockMvc.perform(post("/api/patients")
+        mockMvc.perform(post("/api/v1/patients")
                         .cookie(cookieUserA)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(org.springframework.test.web.servlet.result.MockMvcResultHandlers.print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is("João da Silva")))
-                .andExpect(jsonPath("$.active", is(true)));
+                .andExpect(jsonPath("$.isActive", is(true)));
 
         assertThat(patientRepo.findAll()).hasSize(1);
-        PatientJpaEntity saved = patientRepo.findAll().get(0);
+        PatientJpaEntity saved = patientRepo.findAll().getFirst();
         assertThat(saved.getOrganizationId()).isEqualTo(orgA.getId());
     }
 
@@ -102,19 +104,19 @@ class PatientIntegrationTest extends BaseIntegrationTest {
         );
         orgRepo.save(orgB);
         UserJpaEntity userB = createUser(orgB, "admin.b@clinica.com");
-        Cookie cookieUserB = doLogin("admin.b@clinica.com", "123456");
+        Cookie cookieUserB = doLogin("admin.b@clinica.com", "123456789");
 
-        createPatientViaApi(cookieUserA, "Paciente A", "11111111111");
+        createPatientViaApi(cookieUserA, "Paciente A", generateValidCpf());
 
-        createPatientViaApi(cookieUserB, "Paciente B", "22222222222");
+        createPatientViaApi(cookieUserB, "Paciente B", generateValidCpf());
 
-        mockMvc.perform(get("/api/patients")
+        mockMvc.perform(get("/api/v1/patients")
                         .cookie(cookieUserA))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", hasSize(1)))
                 .andExpect(jsonPath("$.data[0].name", is("Paciente A")));
 
-        mockMvc.perform(get("/api/patients")
+        mockMvc.perform(get("/api/v1/patients")
                         .cookie(cookieUserB))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", hasSize(1)))
@@ -124,15 +126,14 @@ class PatientIntegrationTest extends BaseIntegrationTest {
     @Test
     @DisplayName("Should soft delete patient")
     void shouldSoftDeletePatient() throws Exception {
-        String cpf = "96632439066";
-        createPatientViaApi(cookieUserA, "Maria Delete", cpf);
+        createPatientViaApi(cookieUserA, "Maria Delete", generateValidCpf());
 
         UUID patientId = patientRepo
                 .findAll()
                 .getFirst()
                 .getId();
 
-        mockMvc.perform(delete("/api/patients/" + patientId)
+        mockMvc.perform(delete("/api/v1/patients/" + patientId)
                         .cookie(cookieUserA))
                 .andExpect(status().isNoContent());
 
@@ -146,7 +147,7 @@ class PatientIntegrationTest extends BaseIntegrationTest {
         User userDomain = User.builder()
                 .withOrganizationId(org.getId())
                 .withEmail(new Email(email))
-                .withPasswordHash(encoder.encode("123456"))
+                .withPasswordHash(encoder.encode("123456789"))
                 .build();
 
         UserJpaEntity entity = userRepo.save(UserJpaEntity.fromDomain(userDomain));
@@ -166,21 +167,44 @@ class PatientIntegrationTest extends BaseIntegrationTest {
     }
 
     private Cookie doLogin(String email, String password) throws Exception {
+        var loginRequest = new LoginRequest(email, password);
+
         MvcResult result = mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\":\"" + email + "\", \"password\":\"" + password + "\"}"))
-                .andExpect(status().isOk())
-                .andReturn();
+                        .content(objectMapper.writeValueAsString(loginRequest)))
+                        .andExpect(status().isOk())
+                        .andReturn();
 
         return result.getResponse().getCookie("access_token");
     }
 
     private void createPatientViaApi(Cookie cookie, String name, String doc) throws Exception {
         CreatePatientRequest request = new CreatePatientRequest(name, "email@teste.com", "11999999999", doc);
-        mockMvc.perform(post("/api/patients")
+        mockMvc.perform(post("/api/v1/patients")
                         .cookie(cookie)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
+    }
+
+    private String generateValidCpf() {
+        Random random = new Random();
+        int n1 = random.nextInt(10);
+        int n2 = random.nextInt(10);
+        int n3 = random.nextInt(10);
+        int n4 = random.nextInt(10);
+        int n5 = random.nextInt(10);
+        int n6 = random.nextInt(10);
+        int n7 = random.nextInt(10);
+        int n8 = random.nextInt(10);
+        int n9 = random.nextInt(10);
+        int d1 = n9 * 2 + n8 * 3 + n7 * 4 + n6 * 5 + n5 * 6 + n4 * 7 + n3 * 8 + n2 * 9 + n1 * 10;
+        d1 = 11 - (d1 % 11);
+        if (d1 > 9) d1 = 0;
+        int d2 = d1 * 2 + n9 * 3 + n8 * 4 + n7 * 5 + n6 * 6 + n5 * 7 + n4 * 8 + n3 * 9 + n2 * 10 + n1 * 11;
+        d2 = 11 - (d2 % 11);
+        if (d2 > 9) d2 = 0;
+
+        return String.format("%d%d%d%d%d%d%d%d%d%d%d", n1, n2, n3, n4, n5, n6, n7, n8, n9, d1, d2);
     }
 }

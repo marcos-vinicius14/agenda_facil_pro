@@ -25,15 +25,30 @@ public final class CpfCnpj {
     }
 
     private boolean isValidCPF(String cpf) {
-        int[] digits = cpf.chars().map(c -> c - '0').toArray();
-        int sum1 = 0, sum2 = 0;
-        for (int i = 0; i < 9; i++) {
-            sum1 += digits[i] * (10 - i);
-            sum2 += digits[i] * (11 - i);
+        if (cpf == null || cpf.length() != 11 || cpf.matches("(\\d)\\1{10}")) {
+            return false;
         }
-        sum1 = (sum1 * 10) % 11;
-        sum2 = (sum2 + digits[9] * 2) * 10 % 11;
-        return sum1 == digits[9] && sum2 == digits[10];
+        char[] digits = cpf.toCharArray();
+        int sum1 = 0;
+        for (int i = 0; i < 9; i++) {
+            sum1 += (digits[i] - '0') * (10 - i);
+        }
+        int check1 = 11 - (sum1 % 11);
+        if (check1 == 10 || check1 == 11) {
+            check1 = 0;
+        }
+        if (check1 != (digits[9] - '0')) {
+            return false;
+        }
+        int sum2 = 0;
+        for (int i = 0; i < 10; i++) {
+            sum2 += (digits[i] - '0') * (11 - i);
+        }
+        int check2 = 11 - (sum2 % 11);
+        if (check2 == 10 || check2 == 11) {
+            check2 = 0;
+        }
+        return check2 == (digits[10] - '0');
     }
 
     private boolean isValidCNPJ(String cnpj) {

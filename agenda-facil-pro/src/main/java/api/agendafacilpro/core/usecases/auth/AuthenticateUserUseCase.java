@@ -37,7 +37,7 @@ public final class AuthenticateUserUseCase implements UseCase<LoginInput, LoginO
         checkLockStatus(user);
 
         try {
-            validatePassword(input.password(), user);
+            validatePassword(input.password().getPlainPassword(), user);
         } catch (ValidationException e) {
             user.recordFailedLogin();
             userGateway.update(user);
